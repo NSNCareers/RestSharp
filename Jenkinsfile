@@ -1,7 +1,7 @@
 pipeline {
         agent any
          environment {
-             registry = "dockerelvis/employeeapplicationrepo"
+             registry = "dockerelvis/restsharpapi"
              registryCredential = 'dockerhub'
              dockerImagenotage = ''
                     }
