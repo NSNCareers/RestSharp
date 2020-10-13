@@ -55,7 +55,7 @@ namespace RestSharpTest
             var itemId = shoppingCart.Id;
             var results = GetRequest.CreateShoppingCartAsyncJson(shoppingCart,itemId);
             var responce = $"Successfully added Item with Id:{itemId}";
-            Assert.AreEqual(results,responce);
+            Assert.AreEqual(results.Content,responce);
         }
 
         [Test]

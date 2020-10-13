@@ -71,7 +71,7 @@ namespace RestSharpApiTest.RestSharp_Handler
 
         public static IRestResponse UpdateShoppingCartAsyncJson(ShoppingCart shoppingCart,int tokenId)
         {
-            RestRequest request = new RestRequest("v3/shopping", Method.PUT);
+            RestRequest request = new RestRequest("v3/shopping", Method.POST);
             request.AddJsonBody(shoppingCart);
             //var token = GetToken(tokenId);
             request.AddHeader("cache-control", "no-cache");
@@ -97,10 +97,10 @@ namespace RestSharpApiTest.RestSharp_Handler
         {
             var token = GetToken(tokenId);
             //client.Authenticator = new JwtAuthenticator(token);
-            RestRequest request = new RestRequest("v1/shopping", Method.POST);
+            RestRequest request = new RestRequest("v3/shopping", Method.PUT);
+            //request.AddParameter("Authorization", token, ParameterType.HttpHeader);
             request.AddJsonBody(shoppingCart);
             request.AddHeader("cache-control", "no-cache");
-            //request.AddParameter("Authorization", token, ParameterType.HttpHeader);
 
             var responseResults = GetAsyncResponse<object>(client, request).GetAwaiter().GetResult();
             return responseResults;
