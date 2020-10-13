@@ -1,66 +1,77 @@
-using System.Threading.Tasks;
-using EmployeeApp.EmployeeModels;
 using NUnit.Framework;
-using RestSharpApiTest.InitializeRequests;
+using RestSharpApiTest.RestSharp_Handler;
 using RestSharpTest.Data;
+using RestSharpTest.Models;
 
 namespace RestSharpTest
 {
     public class Tests
     {
+        private ShoppingCart shoppingCart;
+        private ShoppingCart _shoppingCart;
+
         [SetUp]
         public void Setup()
         {
+            shoppingCart = ShoppingCartData.ShoppingCartInit();
+            _shoppingCart = ShoppingCartData.ShoppingCartUpdate();
         }
 
         [Test]
-        public void GetEmployeeWithIdOne()
+        public void GetToken()
         {
-            var results = GetRequest.GetEmployeesWithIdOne("3");
+            var token = shoppingCart.Id;
+            var results = GetRequest.GetToken(token);
             Assert.NotNull(results);
         }
 
         [Test]
-        public void GetEmployeeWithIdTwo()
+        public void GetUserFromShoppingCartAsync()
         {
-            var results = GetRequest.GetEmployeesWithIdTwo("1");
-            Assert.NotNull(results);
+            var itemId = shoppingCart.Id;
+            var results = GetRequest.GetUserFromShoppingCartAsync(itemId);
+            Assert.IsInstanceOf<ShoppingCart>(results);
         }
 
         [Test]
-        public void GetEmployeeWithIdAsync()
+        public void GetUserFromShoppingCartAsyncJson()
         {
-            var results = GetRequest.GetEmployeesWithIdAsync("2");
-            Assert.NotNull(results);
+            var itemId = shoppingCart.Id;
+            var results = GetRequest.GetUserFromShoppingCartAsyncJson(itemId);
+            Assert.IsInstanceOf<ShoppingCart>(results);
         }
 
         [Test]
-        public void GetEmployeeWithIdAsyncJson()
+        public void GetAllUsersFromShoppingCartAsyncJson()
         {
-            var results = GetRequest.GetEmployeesWithIdAsyncJson("2");
-            Assert.NotNull(results);
+            var token = shoppingCart.Id;
+            var results = GetRequest.GetAllUsersFromShoppingCart(token);
+            Assert.IsInstanceOf<ShoppingCart>(results);
         }
 
         [Test]
-        public void CreateEmployeeWithIdAsyncJson()
+        public void CreateShoppingCartAsyncJson()
         {
-            var employeeData = EmployeeData.InitializeEmployee();
-            var results = GetRequest.CreateEmployeesWithIdAsyncJson(employeeData);
-            Assert.NotNull(results);
+            var itemId = shoppingCart.Id;
+            var results = GetRequest.CreateShoppingCartAsyncJson(shoppingCart,itemId);
+            var responce = $"Successfully added Item with Id:{itemId}";
+            Assert.AreEqual(results,responce);
         }
 
         [Test]
-        public void DeleteEmployeeWithIdAsyncJson()
+        public void DeleteShoppingCartAsyncJson()
         {
-            var results = GetRequest.DeleteEmployeesWithIdAsyncJson("12");
-            Assert.NotNull(results);
+            var itemId = shoppingCart.Id;
+            var results = GetRequest.DeleteShoppingCartAsyncJson(itemId);
+            var responce = $"Successfully removed User with Id:{itemId}";
+            Assert.AreEqual(results, responce);
         }
 
         [Test]
-        public void UpdateEmployeeWithIdAsyncJson()
+        public void UpdateShoppingCartAsyncJson()
         {
-            var employeeData = EmployeeData.UpdateEmployee();
-            var results = GetRequest.UpdateEmployeesWithIdAsyncJson(employeeData);
+            var itemId = shoppingCart.Id;
+            var results = GetRequest.UpdateShoppingCartAsyncJson(_shoppingCart,itemId);
             Assert.NotNull(results);
         }
     }

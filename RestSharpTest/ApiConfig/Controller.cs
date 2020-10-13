@@ -3,9 +3,7 @@ namespace RestSharpApiTest.Config
 {
     public enum Controller
     {
-        Department,
         Address,
-        Employee,
-        Profile
+        Item
     }
 }

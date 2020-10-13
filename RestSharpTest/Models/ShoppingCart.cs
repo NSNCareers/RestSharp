@@ -1,0 +1,20 @@
+﻿using System;
+using System.Collections.Generic;
+
+namespace RestSharpTest.Models
+{
+    public class ShoppingCart
+    {
+        public int Id { get; set; }
+        public string Gender { get; set; }
+        public ICollection<Item> Item { get; set; }
+        public string CustomerName { get; set; }
+        public string OrderQuantity { get; set; }
+        public decimal Price { get; set; }
+
+        // So that entity framework will populate address when getting shoppingcart from DB
+        public virtual CustomerAddress Address { get; set; }
+        public DateTime DateTime { get { return DateTime.Now; } }
+        public string Message { get; set; }
+    }
+}
