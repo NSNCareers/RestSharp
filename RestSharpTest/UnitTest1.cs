@@ -30,7 +30,7 @@ namespace RestSharpTest
         [Test, Order(5)]
         public void GetUserFromShoppingCartAsyncJson()
         {
-            id = GetRequest.results;
+            id = GetRequest.results; //
             var results = GetRequest.GetUserFromShoppingCartAsyncJson(int.Parse(id));
             Assert.IsInstanceOf<object>(results);
         }
