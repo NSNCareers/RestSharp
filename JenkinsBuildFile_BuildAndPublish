@@ -25,21 +25,21 @@ pipeline{
         stage('Restore Solution'){
             steps{
                 echo 'Restoring Solution'
-                sh "dotnet restore Asp.Dot.NetCoreWebApp.sln"
+                sh "dotnet restore RestSharpApi.sln"
             }
         }
 
         stage('Build Solution'){
             steps{
                 echo 'Building Solution'
-                 sh 'dotnet build Asp.Dot.NetCoreWebApp.sln'
+                 sh 'dotnet build RestSharpApi.sln'
             }
         }
 
         stage('Testing Project'){
             steps{
                 echo 'Running unit tests'
-                 sh 'dotnet test Dot.NetCoreWebApp.csproj'
+                 sh 'dotnet test RestSharpTest.csproj'
             }
 
         }
