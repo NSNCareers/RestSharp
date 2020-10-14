@@ -9,15 +9,17 @@ namespace RestSharpTest
     {
         private ShoppingCart shoppingCart;
         private ShoppingCart _shoppingCart;
+        private string id;
+        private string idUpdated;
+        private string idRemoved;
 
         [SetUp]
         public void Setup()
         {
             shoppingCart = ShoppingCartData.ShoppingCartInit();
-            _shoppingCart = ShoppingCartData.ShoppingCartUpdate();
         }
 
-        [Test]
+        [Test, Order(1)]
         public void GetToken()
         {
             var token = shoppingCart.Id;
@@ -25,54 +27,57 @@ namespace RestSharpTest
             Assert.NotNull(results);
         }
 
-        [Test]
-        public void GetUserFromShoppingCartAsync()
-        {
-            var itemId = shoppingCart.Id;
-            var results = GetRequest.GetUserFromShoppingCartAsync(itemId);
-            Assert.IsInstanceOf<ShoppingCart>(results);
-        }
-
-        [Test]
+        [Test, Order(5)]
         public void GetUserFromShoppingCartAsyncJson()
         {
-            var itemId = shoppingCart.Id;
-            var results = GetRequest.GetUserFromShoppingCartAsyncJson(itemId);
-            Assert.IsInstanceOf<ShoppingCart>(results);
+            id = GetRequest.results;
+            var results = GetRequest.GetUserFromShoppingCartAsyncJson(int.Parse(id));
+            Assert.IsInstanceOf<object>(results);
         }
 
-        [Test]
+        [Test, Order(3)]
         public void GetAllUsersFromShoppingCartAsyncJson()
         {
             var token = shoppingCart.Id;
             var results = GetRequest.GetAllUsersFromShoppingCart(token);
-            Assert.IsInstanceOf<ShoppingCart>(results);
+            Assert.IsInstanceOf<object>(results);
         }
 
-        [Test]
+        [Test,Order(2)]
         public void CreateShoppingCartAsyncJson()
         {
             var itemId = shoppingCart.Id;
-            var results = GetRequest.CreateShoppingCartAsyncJson(shoppingCart,itemId);
-            var responce = $"Successfully added Item with Id:{itemId}";
-            Assert.AreEqual(results.Content,responce);
+            var res = GetRequest.CreateShoppingCartAsyncJson(shoppingCart,itemId);
+            var res1 = res.Content.ToString().TrimStart('"');
+            var results = res1.ToString().TrimEnd('"');
+            id = GetRequest.results;
+            var responce = $"Successfully added Item with Id:{id}";
+            Assert.AreEqual(results,responce);
         }
 
-        [Test]
-        public void DeleteShoppingCartAsyncJson()
+        [Test, Order(4)]
+        public void UpdateShoppingCartAsyncJson()
         {
-            var itemId = shoppingCart.Id;
-            var results = GetRequest.DeleteShoppingCartAsyncJson(itemId);
-            var responce = $"Successfully removed User with Id:{itemId}";
+            var itemId = int.Parse(id);
+            _shoppingCart = ShoppingCartData.ShoppingCartUpdate(int.Parse(id));
+            var res = GetRequest.UpdateShoppingCartAsyncJson(_shoppingCart,itemId);
+            var res1 = res.Content.ToString().TrimStart('"');
+            var results = res1.ToString().TrimEnd('"');
+            idUpdated = GetRequest.updateResults;
+            var responce = $"Successfully updated user with Id:{idUpdated}";
             Assert.AreEqual(results, responce);
         }
 
-        [Test]
-        public void UpdateShoppingCartAsyncJson()
+        [Test, Order(6)]
+        public void RemoveShoppingCartAsyncJson()
         {
-            var itemId = shoppingCart.Id;
-            var results = GetRequest.UpdateShoppingCartAsyncJson(_shoppingCart,itemId);
-            Assert.NotNull(results);
+            var itemId = int.Parse(id);
+            var res = GetRequest.DeleteShoppingCartAsyncJson(itemId);
+            var res1 = res.Content.ToString().TrimStart('"');
+            var results = res1.ToString().TrimEnd('"');
+            idRemoved = GetRequest.removedResults;
+            var responce = $"Successfully removed User with Id:{id}";
+            Assert.AreEqual(results, responce);
         }
     }
 }

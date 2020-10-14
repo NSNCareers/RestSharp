@@ -4,6 +4,7 @@ using RestSharp.Serialization.Json;
 using RestSharpApiTest.Config;
 using RestSharpTest.Models;
 using System;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace RestSharpApiTest.RestSharp_Handler
@@ -15,10 +16,13 @@ namespace RestSharpApiTest.RestSharp_Handler
         private static Uri url = new Uri(Url);
         private static RestClient client = new RestClient(url);
         private static JsonDeserializer json = new JsonDeserializer();
+        public static string results { get; set; }
+        public static string updateResults { get; set;}
+        public static string removedResults { get; set; }
 
 
 
-        public static string GetToken(int userId)
+        public static IRestResponse GetToken(int userId)
         {
             RestRequest request = new RestRequest("v2/shopping/" + "{userId}", Method.GET);
             request.AddUrlSegment("userId", userId);
@@ -26,26 +30,24 @@ namespace RestSharpApiTest.RestSharp_Handler
 
             //Task added to execute function hence result can be awaited
             //var response = client.Execute(request).Content;
-            var responseResults = GetAsyncResponse<object>(client, request).GetAwaiter().GetResult().Content;
+            var responseResults = GetAsyncResponse<object>(client, request).GetAwaiter().GetResult();
             return responseResults;
         }
 
-        public static ShoppingCart GetAllUsersFromShoppingCart(int userId)
+        public static IRestResponse GetAllUsersFromShoppingCart(int userId)
         {
-            RestRequest request = new RestRequest("v3/shopping/" + "{id}", Method.GET);
+            RestRequest request = new RestRequest("v3/shopping", Method.GET);
             //var token = GetToken(userId);
             request.AddHeader("cache-control", "no-cache");
             //request.AddParameter("Authorization", token, ParameterType.HttpHeader);
 
             // Strongly typed results
-            var results = client.Execute<ShoppingCart>(request);
+            var responseResults = GetAsyncResponse<object>(client, request).GetAwaiter().GetResult();
 
-            var listOfUsers = results.Data;
-
-            return listOfUsers;
+            return responseResults;
         }
 
-        public static IRestResponse GetUserFromShoppingCartAsync(int id)
+        public static IRestResponse GetUserFromShoppingCartAsyncJson(int id)
         {
             RestRequest request = new RestRequest("v3/shopping/" + "{id}", Method.GET);
             //var token = GetToken(id);
@@ -53,19 +55,7 @@ namespace RestSharpApiTest.RestSharp_Handler
             request.AddHeader("cache-control", "no-cache");
             //request.AddParameter("Authorization", token, ParameterType.HttpHeader);
 
-            var responseResults = GetAsyncResponse<ShoppingCart>(client,request).GetAwaiter().GetResult();
-            return responseResults;
-        }
-
-        public static IRestResponse GetUserFromShoppingCartAsyncJson(int id)
-        {
-            RestRequest request = new RestRequest("v3/shopping" + "{id}", Method.GET);
-            //var token = GetToken(id);
-            request.AddUrlSegment("id", id);
-            request.AddHeader("cache-control", "no-cache");
-            //request.AddParameter("Authorization", token, ParameterType.HttpHeader);
-
-            var responseResults = GetAsyncResponse<ShoppingCart>(client, request).GetAwaiter().GetResult();
+            var responseResults = GetAsyncResponse<object>(client, request).GetAwaiter().GetResult();
             return responseResults;
         }
 
@@ -73,11 +63,12 @@ namespace RestSharpApiTest.RestSharp_Handler
         {
             RestRequest request = new RestRequest("v3/shopping", Method.POST);
             request.AddJsonBody(shoppingCart);
-            //var token = GetToken(tokenId);
             request.AddHeader("cache-control", "no-cache");
+            //var token = GetToken(tokenId);
             //request.AddParameter("Authorization", token, ParameterType.HttpHeader);
 
-            var responseResults = GetAsyncResponse<ShoppingCart>(client, request).GetAwaiter().GetResult();
+            var responseResults = GetAsyncResponse<object>(client, request).GetAwaiter().GetResult();
+            updateResults = responseResults.Data.ToString().TrimStart('S', 'u', 'c', 'c', 'e', 's', 's', 'f', 'u', 'l', 'l', 'y', ' ','u', 'p', 'd', 'a','t','e','d',' ','u','s','e', 'r', ' ', 'w', 'i', 't', 'h', ' ', 'I', 'd', ':');
             return responseResults;
         }
 
@@ -89,13 +80,13 @@ namespace RestSharpApiTest.RestSharp_Handler
             request.AddHeader("cache-control", "no-cache");
             //request.AddParameter("Authorization", token, ParameterType.HttpHeader);
 
-            var responseResults = GetAsyncResponse<ShoppingCart>(client, request).GetAwaiter().GetResult();
+            var responseResults = GetAsyncResponse<object>(client, request).GetAwaiter().GetResult();
+            removedResults = responseResults.Data.ToString().TrimStart('S', 'u', 'c', 'c', 'e', 's', 's', 'f', 'u', 'l', 'l', 'y', ' ', 'r', 'e', 'm', 'o', 'v', 'e', 'd', ' ', 'U', 's', 'e', 'r', ' ', 'w', 'i', 't', 'h', ' ', 'I', 'd', ':');
             return responseResults;
         }
 
         public static IRestResponse CreateShoppingCartAsyncJson(ShoppingCart shoppingCart,int tokenId)
         {
-            var token = GetToken(tokenId);
             //client.Authenticator = new JwtAuthenticator(token);
             RestRequest request = new RestRequest("v3/shopping", Method.PUT);
             //request.AddParameter("Authorization", token, ParameterType.HttpHeader);
@@ -103,6 +94,7 @@ namespace RestSharpApiTest.RestSharp_Handler
             request.AddHeader("cache-control", "no-cache");
 
             var responseResults = GetAsyncResponse<object>(client, request).GetAwaiter().GetResult();
+            results = responseResults.Data.ToString().TrimStart('S','u','c','c','e','s','s','f','u','l','l','y',' ','a','d','d','e','d','I','t','e','m',' ','w','i','t','h',' ','I','d',':');
             return responseResults;
         }
 
