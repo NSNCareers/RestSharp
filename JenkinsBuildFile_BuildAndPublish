@@ -39,7 +39,7 @@ pipeline{
         stage('Testing Project'){
             steps{
                 echo 'Running unit tests'
-                 sh 'dotnet test RestSharpTest.csproj'
+                 sh 'dotnet test RestSharpTest.csproj.user'
             }
 
         }
