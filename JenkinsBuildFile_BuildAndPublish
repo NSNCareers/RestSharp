@@ -59,6 +59,8 @@ pipeline{
         
           post {
         always {
+		
+		    nunit testResultsPattern: 'TestResult.xml'
             echo 'One way or another, I have finished'
             deleteDir() /* clean up our workspace */
         }
