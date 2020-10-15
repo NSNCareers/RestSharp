@@ -61,7 +61,7 @@ pipeline{
         always {
 		
 		    nunit testResultsPattern: 'TestResult.xml' 
-		    nunit result=TestResult.xml;transform="nunit3-xunit.xslt"
+		    - result=TestResult.xml;transform="nunit3-xunit.xslt"
             echo 'One way or another, I have finished'
             deleteDir() /* clean up our workspace */
         }
