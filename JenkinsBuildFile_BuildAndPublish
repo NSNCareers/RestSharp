@@ -60,8 +60,8 @@ pipeline{
           post {
         always {
 		
-		    nunit testResultsPattern: 'TestResult.xml' 
-		    - result=TestResult.xml;transform="nunit3-xunit.xslt"
+		    nunit testResultsPattern: 'TestResult.xml', debug: false, 
+                 keepJUnitReports: true, skipJUnitArchiver:false, failIfNoResults: true
             echo 'One way or another, I have finished'
             deleteDir() /* clean up our workspace */
         }
