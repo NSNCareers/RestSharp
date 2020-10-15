@@ -43,6 +43,14 @@ pipeline{
             }
 
         }
+		
+		stage('Publish Test Results'){
+            steps{
+                 echo 'Publishing Nunit Test Results'
+                nunit testResultsPattern: 'TestResult.xml'
+            }
+
+        }
 
         stage('Publish build'){
             steps{
@@ -59,9 +67,6 @@ pipeline{
         
           post {
         always {
-		
-		    nunit testResultsPattern: 'TestResult.xml', debug: false, 
-                 keepJUnitReports: true, skipJUnitArchiver:false, failIfNoResults: true
             echo 'One way or another, I have finished'
             deleteDir() /* clean up our workspace */
         }
