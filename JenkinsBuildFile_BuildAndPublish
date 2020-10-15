@@ -47,7 +47,6 @@ pipeline{
 		stage('Publish Test Results'){
             steps{
                  echo 'Publishing Nunit Test Results'
-				 nunit testResultsPattern: 'TestResult.xml'
             }
 
         }
