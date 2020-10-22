@@ -7,6 +7,11 @@ pipeline{
     NAME="Ngwesse Elvis"
     BuildOutput="./BuildOutput"  
     }
+
+
+    options {
+        timeout(time: 6, unit: 'MINUTES')   // timeout on whole pipeline job
+    }
     
    
     stages{
